@@ -770,7 +770,7 @@
         // KONFIGURASI GOOGLE APPS SCRIPT (GAS)
         // ==========================================
         // Ganti string di bawah ini dengan URL Web App GAS milik Anda
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzuG-ikxdk4zXdaYFeVjIkeJbhllWEcMSfjDpBne7OX4FPhkZ6yFLNTfj7cOLE64bf0gg/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyj3MdJWKNhIgzjPCHoejE48D0qGEzqQMntlic6VnbGNC2bJV0iBKDJI09J8kzBE4qi3A/exec";
 
         // Global State & Data Models
         const state = {
@@ -1746,6 +1746,12 @@
 
             let wrongCount = quizQuestions.length - correctCount;
 
+            // Tentukan predikat di sini agar bisa dikirim ke database
+            let predicate = 'Sangat Baik (A)';
+            if (totalScore < 60) predicate = 'Perlu Bimbingan (D)';
+            else if (totalScore < 75) predicate = 'Cukup Baik (C)';
+            else if (totalScore < 88) predicate = 'Baik (B)';
+
             state.berlatih.score = totalScore;
             state.berlatih.levelScores = {
                 lvl1: Math.round((lvl1Correct / 3) * 100),
@@ -1763,6 +1769,8 @@
                 kelas: state.student.class,
                 benar: correctCount,
                 salah: wrongCount,
+                nilaiAkhir: totalScore,
+                predikat: predicate,
                 detail: detailJawaban,
                 questions: quizQuestions // Mengirim data soal untuk dibuatkan sheet otomatis jika belum ada
             };
